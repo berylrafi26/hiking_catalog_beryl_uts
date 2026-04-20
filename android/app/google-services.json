@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640156216613",
+    "project_id": "hiking-apps",
+    "storage_bucket": "hiking-apps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640156216613:android:997915fbf6df74ac8cbecc",
+        "android_client_info": {
+          "package_name": "com.hiking.beryl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmPzi7VLzqXTL2XoyHJa-UpEARtBeRqyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -84,8 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Login berhasil")),
                         );
-
-                        // TODO: pindah ke home
                       } catch (e) {
                         ScaffoldMessenger.of(
                           context,
