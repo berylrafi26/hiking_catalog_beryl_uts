@@ -81,3 +81,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           passwordController.text,
                         );
 
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Check your email for verification"),
+                          ),
+                        );
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(e.toString())));
+                      }
+
+                      setState(() => isLoading = false);
+                    },
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text("Register"),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Already have account? Login"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
