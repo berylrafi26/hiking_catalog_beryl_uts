@@ -53,3 +53,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       border: OutlineInputBorder(),
                     ),
                   ),
+
+                  const SizedBox(height: 15),
+
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: "Password",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[700],
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    onPressed: () async {
+                      setState(() => isLoading = true);
+
+                      try {
+                        await AuthService().register(
+                          emailController.text,
+                          passwordController.text,
+                        );
+
