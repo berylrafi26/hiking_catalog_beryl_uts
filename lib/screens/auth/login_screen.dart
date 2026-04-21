@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +17,60 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   bool isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> handleLogin() async {
+    setState(() => isLoading = true);
+
+    try {
+      final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // cek verifikasi email
+      if (!result.user!.emailVerified) {
+        throw Exception("Email belum diverifikasi");
+      }
+
+      // generate JWT dummy
+      String jwt = await ApiService().generateJwt();
+
+      // simpan JWT
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString("jwt", jwt);
+
+      // pindah ke home
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = "Login gagal";
+
+      if (e.code == 'user-not-found') {
+        message = "User tidak ditemukan";
+      } else if (e.code == 'wrong-password') {
+        message = "Password salah";
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+
+    setState(() => isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Center(
                     child: Icon(Icons.landscape, size: 60, color: Colors.green),
                   ),
+
                   const SizedBox(height: 10),
 
                   const Center(
@@ -54,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87, // 🔥 FIX: jangan putih
                       ),
                     ),
                   ),
@@ -105,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 25),
 
-                  // BUTTON
+                  // BUTTON LOGIN
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],
@@ -114,9 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () async {
-                      // logic tetap
-                    },
+                    onPressed: handleLogin,
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text("Login", style: TextStyle(fontSize: 16)),
@@ -124,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 15),
 
-                  // REGISTER LINK
+                  // LINK KE REGISTER
                   Center(
                     child: GestureDetector(
                       onTap: () {
