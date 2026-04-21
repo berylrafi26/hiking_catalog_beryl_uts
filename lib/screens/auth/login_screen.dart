@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // generate JWT dummy
       String jwt = await ApiService().generateJwt();
 
+      print("JWT: $jwt");
       // simpan JWT
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("jwt", jwt);
