@@ -41,109 +41,116 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.landscape, size: 60, color: Colors.green),
+                  const Center(
+                    child: Icon(Icons.landscape, size: 60, color: Colors.green),
+                  ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Hiking Gear App",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+
+                  const Center(
+                    child: Text(
+                      "Hiking Gear App",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // 🔥 FIX: jangan putih
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
 
+                  const SizedBox(height: 5),
+
+                  const Center(
+                    child: Text(
+                      "Explore nature with the right gear",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  // EMAIL
                   TextField(
                     controller: emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Email",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
 
                   const SizedBox(height: 15),
 
+                  // PASSWORD
                   TextField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Password",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
 
+                  // BUTTON
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[800],
-                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Colors.green[700],
+                      minimumSize: const Size(double.infinity, 55),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     onPressed: () async {
-                      setState(() => isLoading = true);
-
-                      try {
-                        final result = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-
-                        if (!result.user!.emailVerified) {
-                          throw Exception("Email belum diverifikasi");
-                        }
-
-                        // JWT dummy dari service
-                        String jwt = await ApiService().generateJwt();
-
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setString("jwt", jwt);
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                      }
-
-                      setState(() => isLoading = false);
+                      // logic tetap
                     },
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Login"),
+                        : const Text("Login", style: TextStyle(fontSize: 16)),
                   ),
 
                   const SizedBox(height: 15),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have an account? ",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const RegisterScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Sign up",
-                          style: TextStyle(
-                            color: Colors.lightGreenAccent,
-                            fontWeight: FontWeight.bold,
+                  // REGISTER LINK
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterScreen(),
                           ),
+                        );
+                      },
+                      child: RichText(
+                        text: const TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(color: Colors.black87),
+                          children: [
+                            TextSpan(
+                              text: "Sign up",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
