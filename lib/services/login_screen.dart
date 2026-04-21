@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
-import '../services/auth_services.dart';
-import 'register_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/api_services.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,79 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     "Hiking Gear App",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(height: 20),
 
-                  TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: "Email",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[800],
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    onPressed: () async {
-                      setState(() => isLoading = true);
-
-                      try {
-                        await AuthService().login(
-                          emailController.text,
-                          passwordController.text,
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Login berhasil")),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                      }
-
-                      setState(() => isLoading = false);
-                    },
-                    child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Login"),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text("Create new account"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
