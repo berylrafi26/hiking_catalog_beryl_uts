@@ -169,12 +169,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: handleLogin,
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Login", style: TextStyle(fontSize: 16)),
+                        : const Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
 
                   const SizedBox(height: 15),
 
-                  // LINK KE REGISTER
                   Center(
                     child: GestureDetector(
                       onTap: () {
