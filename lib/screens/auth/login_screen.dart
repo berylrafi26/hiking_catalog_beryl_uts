@@ -1,14 +1,19 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
-import '../services/auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/api_services.dart';
+import '../home/home_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -20,9 +25,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF134E5E), Color(0xFF71B280)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Color(0xFF0F2027), Color(0xFF2C7744)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
@@ -31,19 +36,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withOpacity(0.92),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.terrain, size: 60, color: Colors.green),
+                  const Icon(Icons.landscape, size: 60, color: Colors.green),
                   const SizedBox(height: 10),
                   const Text(
-                    "Join the Adventure",
+                    "Hiking Gear App",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(height: 20),
 
                   TextField(
@@ -69,25 +72,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[700],
+                      backgroundColor: Colors.green[800],
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     onPressed: () async {
                       setState(() => isLoading = true);
 
                       try {
-                        await AuthService().register(
-                          emailController.text,
-                          passwordController.text,
-                        );
+                        final result = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Check your email for verification"),
-                          ),
-                        );
+                        if (!result.user!.emailVerified) {
+                          throw Exception("Email belum diverifikasi");
+                        }
 
-                        Navigator.pop(context);
+                        // JWT dummy dari service
+                        String jwt = await ApiService().generateJwt();
+
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString("jwt", jwt);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        );
                       } catch (e) {
                         ScaffoldMessenger.of(
                           context,
@@ -98,16 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Register"),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Already have account? Login"),
+                        : const Text("Login"),
                   ),
                 ],
               ),

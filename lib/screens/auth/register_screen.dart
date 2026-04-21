@@ -1,19 +1,14 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../services/api_services.dart';
-import '../home/home_screen.dart';
+import '../../services/auth_services.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -25,9 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0F2027), Color(0xFF2C7744)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            colors: [Color(0xFF134E5E), Color(0xFF71B280)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Center(
@@ -36,17 +31,19 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.92),
+                color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.landscape, size: 60, color: Colors.green),
+                  const Icon(Icons.terrain, size: 60, color: Colors.green),
                   const SizedBox(height: 10),
                   const Text(
-                    "Hiking Gear App",
+                    "Join the Adventure",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+
                   const SizedBox(height: 20),
 
                   TextField(
@@ -72,33 +69,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[800],
+                      backgroundColor: Colors.green[700],
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     onPressed: () async {
                       setState(() => isLoading = true);
 
                       try {
-                        final result = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-
-                        if (!result.user!.emailVerified) {
-                          throw Exception("Email belum diverifikasi");
-                        }
-
-                        // JWT dummy dari service
-                        String jwt = await ApiService().generateJwt();
-
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setString("jwt", jwt);
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        await AuthService().register(
+                          emailController.text,
+                          passwordController.text,
                         );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Check your email for verification"),
+                          ),
+                        );
+
+                        Navigator.pop(context);
                       } catch (e) {
                         ScaffoldMessenger.of(
                           context,
@@ -109,7 +98,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Login"),
+                        : const Text("Register"),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Already have account? Login"),
                   ),
                 ],
               ),
