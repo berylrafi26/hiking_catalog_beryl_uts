@@ -8,70 +8,27 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F6F3),
       appBar: AppBar(
-        title: const Text("Hiking Gear"),
-        backgroundColor: Colors.green[800],
+        title: const Text(
+          "Hiking Gear",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF134E5E), Color(0xFF71B280)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "Temukan Peralatan Hiking Terbaik 🏕️",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
           ),
-        ),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('products').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              );
-            }
+          const SizedBox(height: 10),
 
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text(
-                  "Terjadi error",
-                  style: TextStyle(color: Colors.white),
-                ),
-              );
-            }
-
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(
-                child: Text(
-                  "Belum ada produk",
-                  style: TextStyle(color: Colors.white),
-                ),
-              );
-            }
-
-            final products = snapshot.data!.docs;
-
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final item = products[index];
-
-                final data = item.data() as Map<String, dynamic>;
-
-                return ProductCard(
-                  name: data['name'] ?? "No Name",
-                  price: data['price'] ?? 0,
-                  image: data['image'] ?? "",
-                  onAdd: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("${data['name']} ditambahkan")),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+        
