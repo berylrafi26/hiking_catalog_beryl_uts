@@ -8,27 +8,60 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F3),
+      backgroundColor: const Color(0xFFF1F5F2),
+
       appBar: AppBar(
+        elevation: 0,
         title: const Text(
           "Hiking Gear",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              "Temukan Peralatan Hiking Terbaik 🏕️",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)],
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Siap Mendaki?",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  "Temukan perlengkapan terbaik untuk petualanganmu",
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
             ),
           ),
+
           const SizedBox(height: 10),
 
           Expanded(
@@ -58,33 +91,17 @@ class HomeScreen extends StatelessWidget {
                     final item = products[index];
                     final data = item.data() as Map<String, dynamic>;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: ProductCard(
-                          name: data['name'] ?? "No Name",
-                          price: data['price'] ?? 0,
-                          image: data['image'] ?? "",
-                          onAdd: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("${data['name']} ditambahkan"),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                    return ProductCard(
+                      name: data['name'] ?? "No Name",
+                      price: data['price'] ?? 0,
+                      image: data['image'] ?? "",
+                      onAdd: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("${data['name']} ditambahkan"),
+                          ),
+                        );
+                      },
                     );
                   },
                 );
