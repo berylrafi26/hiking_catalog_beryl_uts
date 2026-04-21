@@ -38,4 +38,40 @@ class HomeScreen extends StatelessWidget {
               );
             }
 
-    
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text(
+                  "Belum ada produk",
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }
+
+            final products = snapshot.data!.docs;
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final item = products[index];
+
+                final data = item.data() as Map<String, dynamic>;
+
+                return ProductCard(
+                  name: data['name'] ?? "No Name",
+                  price: data['price'] ?? 0,
+                  image: data['image'] ?? "",
+                  onAdd: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("${data['name']} ditambahkan")),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
