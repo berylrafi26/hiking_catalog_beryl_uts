@@ -85,4 +85,27 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
 
-               
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green[700],
+                        ),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${item['name']} ditambahkan"),
+                            ),
+                          );
+                        },
+                        child: const Text("Add"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
