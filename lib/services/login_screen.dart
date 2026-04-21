@@ -49,4 +49,74 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
 
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: "Password",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[800],
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    onPressed: () async {
+                      setState(() => isLoading = true);
+
+                      try {
+                        final result = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+
+                        if (!result.user!.emailVerified) {
+                          throw Exception("Email belum diverifikasi");
+                        }
+
+                        // JWT dummy dari service
+                        String jwt = await ApiService().generateJwt();
+
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString("jwt", jwt);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(e.toString())));
+                      }
+
+                      setState(() => isLoading = false);
+                    },
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text("Login"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
