@@ -25,6 +25,49 @@ class CartScreen extends StatelessWidget {
         ),
       ),
 
-    
+      body: items.isEmpty
+          ? const Center(child: Text("Keranjang masih kosong"))
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            // 📷 IMAGE
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(18),
+                                bottomLeft: Radius.circular(18),
+                              ),
+                              child: Image.network(
+                                item.image,
+                                width: 90,
+                                height: 90,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
 \
  \
