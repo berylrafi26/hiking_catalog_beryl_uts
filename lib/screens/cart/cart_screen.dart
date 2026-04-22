@@ -69,5 +69,60 @@ class CartScreen extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(12),
                                 child: Column(
-\
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      "Rp ${item.price}",
+                                      style: TextStyle(
+                                        color: Colors.green[700],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.remove),
+                                          onPressed: () {
+                                            cart.decreaseItem(item.id);
+                                          },
+                                        ),
+                                        Text(
+                                          item.quantity.toString(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.add),
+                                          onPressed: () {
+                                            cart.addItem(
+                                              id: item.id,
+                                              name: item.name,
+                                              price: item.price,
+                                              image: item.image,
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                cart.removeItem(item.id);
+                              },
+                            ),
+                          ],
  \
