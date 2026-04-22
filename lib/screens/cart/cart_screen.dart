@@ -169,9 +169,7 @@ class CartScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // 👉 nanti ke checkout
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green[700],
                             padding: const EdgeInsets.symmetric(vertical: 14),

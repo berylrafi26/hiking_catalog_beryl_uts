@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/product_card.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../cart/cart_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,7 +42,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.shopping_cart),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartScreen(),
+                      ),
+                    );
+                  },
                 ),
 
                 if (cart.itemCount > 0)
