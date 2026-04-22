@@ -14,7 +14,11 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           "Hiking Gear",
-          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
         flexibleSpace: Container(

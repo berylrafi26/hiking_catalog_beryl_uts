@@ -73,7 +73,7 @@ class ProductCard extends StatelessWidget {
                       onPressed: onAdd,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[700],
-                        foregroundColor: Colors.white, // 🔥 teks putih
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
