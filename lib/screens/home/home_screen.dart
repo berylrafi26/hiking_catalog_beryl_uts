@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF1F5F2),
 
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         title: const Text(
           "Hiking Gear",
