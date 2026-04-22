@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/product_card.dart';
+import 'package:provider/provider.dart';
+import '../providers/cart_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -100,9 +102,21 @@ class HomeScreen extends StatelessWidget {
                       price: data['price'] ?? 0,
                       image: data['image'] ?? "",
                       onAdd: () {
+                        Provider.of<CartProvider>(
+                          context,
+                          listen: false,
+                        ).addItem(
+                          id: item.id,
+                          name: data['name'] ?? "No Name",
+                          price: data['price'] ?? 0,
+                          image: data['image'] ?? "",
+                        );
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("${data['name']} ditambahkan"),
+                            content: Text(
+                              "${data['name']} ditambahkan ke keranjang",
+                            ),
                           ),
                         );
                       },
