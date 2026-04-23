@@ -1,4 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'widgets/product_card.dart';
+import '../providers/cart_provider.dart';
+import '../cart/cart_screen.dart';
 
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.instance.requestPermission();
+
+    FirebaseMessaging.instance.getToken().then((token) {
+      print("FCM TOKEN: $token");
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Notif masuk: ${message.notification?.title}");
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message.notification?.title ?? "Notifikasi baru"),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF1F5F2),
+
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        title: const Text(
+          "Hiking Gear",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
         ),
 
         actions: [
