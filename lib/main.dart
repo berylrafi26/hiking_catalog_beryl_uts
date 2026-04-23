@@ -4,6 +4,11 @@ import 'package:provider/provider.dart';
 
 import 'screens/auth/login_screen.dart';
 import './screens/providers/cart_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("${message.messageId}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +23,7 @@ void main() async {
       appId: "1:640156216613:web:d5d2e3a74b6effb68cbecc",
     ),
   );
-
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
