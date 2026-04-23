@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
-import 'success_screen.dart';
+import '../checkout/success_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -22,10 +22,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       backgroundColor: const Color(0xFFF1F5F2),
 
       appBar: AppBar(
-        title: const Text(
-          "Checkout",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Checkout", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -38,15 +35,75 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       body: Column(
         children: [
-          
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 const Text(
                   "Pesanan Kamu",
-                  style: TextStyle(
-              
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+
+                ...items.map(
+                  (item) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(item.name),
+                    subtitle: Text("x${item.quantity} • Rp ${item.price}"),
+                    trailing: Text(
+                      "Rp ${item.price * item.quantity}",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                const Text(
+                  "Alamat Pengiriman",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    hintText: "Masukkan alamat lengkap",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 💰 TOTAL + BAYAR
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Total",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Rp ${cart.totalPrice}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -58,10 +115,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (addressController.text.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                              content: Text("Isi alamat dulu")),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Isi alamat dulu")),
                         );
                         return;
                       }
@@ -77,11 +132,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                     ),
                     child: const Text(
@@ -92,10 +145,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
