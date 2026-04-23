@@ -81,7 +81,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
           ),
 
-          // 💰 TOTAL + BAYAR
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
